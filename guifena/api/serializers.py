@@ -16,4 +16,4 @@ class IncidentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incidents
         fields = ('sensor', 'sensor_id', 'sensor_name', 'sensor_location',
-                  'timestamp', 'status')
+                  'timestamp', 'status', 'id')

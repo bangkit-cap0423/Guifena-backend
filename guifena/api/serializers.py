@@ -9,6 +9,11 @@ class SensorSerializers(serializers.ModelSerializer):
 
 
 class IncidentSerializer(serializers.ModelSerializer):
+    sensor_id = serializers.ReadOnlyField(source='sensor.id')
+    sensor_name = serializers.ReadOnlyField(source='sensor.nama')
+    sensor_location = serializers.ReadOnlyField(source='sensor.location')
+
     class Meta:
         model = Incidents
-        fields = '__all__'
+        fields = ('sensor', 'sensor_id', 'sensor_name', 'sensor_location',
+                  'timestamp', 'status')

@@ -1,0 +1,4 @@
+env/
+guifena/api/__pycache__/
+guifena/api/migrations/__pycache__/
+guifena/guifena/__pycache__/

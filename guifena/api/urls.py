@@ -9,6 +9,7 @@ urlpatterns = [
     path('sensors/', views.ListSensors.as_view()),
     path('sensors/<int:id>/', views.GetSensorDetail.as_view()),
     path('incidents/', views.ListIncidents.as_view()),
+    path('incidents/recents/', views.ListRecentIncidents.as_view()),
     path('incidents/<int:id>', views.GetIncidentDetail.as_view()),
     path('sensors/upload/', views.ReceiveAudio.as_view()),
 ]

@@ -1,3 +1,4 @@
+from django.views import generic
 from .serializers import IncidentSerializer, SensorSerializers
 from rest_framework.response import Response
 from django.shortcuts import render
@@ -8,6 +9,7 @@ from .models import Sensors, Incidents
 import datetime
 from django.utils import timezone
 from django_q.tasks import async_task
+import api.constanta as const
 
 
 class index(APIView):
@@ -38,6 +40,17 @@ class ListIncidents(generics.ListAPIView):
         return query
 
 
+class ListRecentIncidents(generics.ListAPIView):
+    serializer_class = IncidentSerializer
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        created_time = now - datetime.timedelta(minutes=60)
+        incidents = Incidents.objects.filter(
+            timestamp__range=(created_time, now))
+        return incidents
+
+
 class GetIncidentDetail(APIView):
     def get(self, request, id):
         incident = Incidents.objects.get(id=id)
@@ -53,9 +66,12 @@ class GetCount(APIView):
             last_seen__range=(created_time, now)).count()
         incidents_count = Incidents.objects.filter(
             timestamp__range=(created_time, now)).count()
+        incidents_ongoing = Incidents.objects.filter(
+            status__lt=const.INCIDENTS_RESOLVED).count()
         payload = {
             "sensors_count": sensors_count,
-            "incidents_count": incidents_count
+            "incidents_count": incidents_count,
+            "all_good": incidents_ongoing == 0
         }
         return Response(payload)
 

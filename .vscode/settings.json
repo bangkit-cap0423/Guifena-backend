@@ -8,4 +8,7 @@
         "--django-settings-module=maumakan.settings",
         "--disable=C0111, C0114, C0116, C0303, C0301, C0103, C0411 "
     ],
+    "python.analysis.extraPaths": [
+        "./guifena"
+    ]
 }

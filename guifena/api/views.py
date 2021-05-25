@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import generics
 # Create your views here.
-from .models import Sensors, Incidents
+from .models import Sensors, Incidents, Token
 import datetime
 from django.utils import timezone
 from django_q.tasks import async_task
@@ -89,4 +89,12 @@ class ReceiveAudio(APIView):
         sensor = Sensors.objects.get(id=sensor_id)
         sensor.last_seen = timezone.now()
         sensor.save()
+        return Response({'status': 'OK'})
+
+
+class ReceiveToken(APIView):
+    def post(self, request):
+        data = request.data
+        token = data['token']
+        Token.objects.create(token=token)
         return Response({'status': 'OK'})

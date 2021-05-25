@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow import keras
 import base64
 from datetime import datetime
-
+from pyfcm import FCMNotification
 # THIS IS WHERE ML CLASSIFICATION WILL HAPPEN
 
 
@@ -38,7 +38,21 @@ def printToConsole(payload: str):
         tf.keras.preprocessing.image.load_img(f"predict_img/{fimg}", target_size=(100, 100))))
     input = np.array(input)
     model1 = keras.models.load_model('model/')
-    print(model1.predict_classes(input))
+    chainsaw_detect = model1.predict_classes(input)
+    chainsaw_detect = chainsaw_detect[0][0]
 
 
 def sendNotification():
+    api_key = 'AAAAej261Qg:APA91bFNLBEeIl_ZPTi98ct_fudgnUDsVEE8Xd7mB9azDSGk5Hu8xJWc8AO6AvNohdySg9hJe7uSdyTwUsoehGKzYbr8JOMZmoVv0Vm3SWmiqlEhy0iFOqB1wMGEgzAMRseJNokpFIPF'
+    tokens = []
+    query_token = Token.objects.all()
+    for query in query_token:
+        tokens.append(query)
+    push_service = FCMNotification(api_key=api_key)
+    data_message = {
+        "raisa": data,
+        "click_action": "FLUTTER_NOTIFICATION_CLICK"
+
+    }
+    push_service.notify_multiple_devices(
+        registration_ids=tokens, data_message=data_message)

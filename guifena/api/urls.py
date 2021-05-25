@@ -12,4 +12,5 @@ urlpatterns = [
     path('incidents/recents/', views.ListRecentIncidents.as_view()),
     path('incidents/<int:id>', views.GetIncidentDetail.as_view()),
     path('sensors/upload/', views.ReceiveAudio.as_view()),
+    path('token/', views.ReceiveToken.as_view())
 ]

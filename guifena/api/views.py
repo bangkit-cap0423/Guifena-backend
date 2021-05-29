@@ -85,7 +85,7 @@ class ReceiveAudio(APIView):
         #audio = data['audio']
         # send audio to background task
         # TODO: CHANGE THIS WITH THE REAL ML
-        async_task('api.tasks.printToConsole', "farin")
+        #async_task('api.tasks.printToConsole', "farin")
         sensor = Sensors.objects.get(id=sensor_id)
         sensor.last_seen = timezone.now()
         sensor.save()

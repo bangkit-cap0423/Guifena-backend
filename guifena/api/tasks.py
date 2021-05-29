@@ -1,3 +1,4 @@
+from api.models import Incidents
 import librosa.display
 import os
 import gc
@@ -8,6 +9,7 @@ from tensorflow import keras
 import base64
 from datetime import datetime
 from pyfcm import FCMNotification
+from .models import Incidents, Sensors
 # THIS IS WHERE ML CLASSIFICATION WILL HAPPEN
 
 
@@ -25,7 +27,7 @@ def extract_spectrogram(fname, iname):
     fig.savefig(iname, dpi=100, pad_inches=0)
 
 
-def printToConsole(payload: str):
+def printToConsole(payload: str, time):
 
     f = f'{str(datetime.now())}_sensor1.wav'
     wav_file = open(f'input/{f}', "wb")
@@ -40,6 +42,15 @@ def printToConsole(payload: str):
     model1 = keras.models.load_model('model/')
     chainsaw_detect = model1.predict_classes(input)
     chainsaw_detect = chainsaw_detect[0][0]
+    if (chainsaw_detect == 1):
+        # INCIDENT DETECTED
+        sensor = Sensors.objects.all().first()
+        Incidents.objects.create(
+            sensor=sensor,
+            status=1,
+            timestamp=time
+        )
+        sendNotification()
 
 
 def sendNotification():

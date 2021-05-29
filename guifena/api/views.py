@@ -10,6 +10,7 @@ import datetime
 from django.utils import timezone
 from django_q.tasks import async_task
 import api.constanta as const
+from rest_framework import status
 
 
 class index(APIView):
@@ -75,21 +76,37 @@ class GetCount(APIView):
         }
         return Response(payload)
 
-#{"sensor_id": 1, "audio": "dasdadasdwasd"}
+# {"sensor_id": 1, "audio": "dasdadasdwasd"}
 
 
 class ReceiveAudio(APIView):
     def post(self, request):
         data = request.data
         sensor_id = data['sensor_id']
-        #audio = data['audio']
+        audio = data['audio']
         # send audio to background task
         # TODO: CHANGE THIS WITH THE REAL ML
-        #async_task('api.tasks.printToConsole', "farin")
+        time = timezone.now()
+        async_task('api.tasks.printToConsole', audio, time)
         sensor = Sensors.objects.get(id=sensor_id)
         sensor.last_seen = timezone.now()
         sensor.save()
         return Response({'status': 'OK'})
+
+
+ class ChangeStatusIncident(APIView):
+     def post(self, request):
+        data = request.data
+        incident_id = data['incident_id']
+        status = data['status']
+        try:
+            incident = Incidents.objects.get(id=incident_id)
+            incident.status = status
+            incident.save()
+            return Response({'status': 'OK'})
+        except:
+            return Response({'status': 'FAILED'}, status = status.HTTP_500_INTERNAL_SERVER_ERROR)    
+                        
 
 
 class ReceiveToken(APIView):

@@ -159,7 +159,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/opt/djangoprojects/reports/bin/gunicorn.errors',
+            'filename': 'gunicorn.errors',
             'maxBytes': 1024 * 1024 * 100,  # 100 mb
         }
     },

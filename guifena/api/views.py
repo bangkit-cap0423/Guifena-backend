@@ -94,8 +94,8 @@ class ReceiveAudio(APIView):
         return Response({'status': 'OK'})
 
 
- class ChangeStatusIncident(APIView):
-     def post(self, request):
+class ChangeStatusIncident(APIView):
+    def post(self, request):
         data = request.data
         incident_id = data['incident_id']
         status = data['status']
@@ -105,8 +105,7 @@ class ReceiveAudio(APIView):
             incident.save()
             return Response({'status': 'OK'})
         except:
-            return Response({'status': 'FAILED'}, status = status.HTTP_500_INTERNAL_SERVER_ERROR)    
-                        
+            return Response({'status': 'FAILED'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ReceiveToken(APIView):
@@ -114,7 +113,7 @@ class ReceiveToken(APIView):
         data = request.data
         token = data['token']
         check_token = Token.objects.filter(token=token).count()
-        if check_token>1:
-            return Response({'status':'OK'})
+        if check_token > 1:
+            return Response({'status': 'OK'})
         Token.objects.create(token=token)
         return Response({'status': 'OK'})

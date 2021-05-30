@@ -58,7 +58,7 @@ def sendNotification():
     tokens = []
     query_token = Token.objects.all()
     for query in query_token:
-        tokens.append(query)
+        tokens.append(query.token)
     push_service = FCMNotification(api_key=api_key)
     data_message = {
         "raisa": 'ok',

@@ -86,7 +86,7 @@ class ReceiveAudio(APIView):
         if 'audio' in data:
             audio = data['audio']
             time = timezone.now()
-            async_task('api.tasks.printToConsole', audio, time)
+            async_task('api.tasks.printToConsole', audio, time, sensor_id)
         sensor = Sensors.objects.get(id=sensor_id)
         sensor.last_seen = timezone.now()
         sensor.save()

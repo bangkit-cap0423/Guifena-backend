@@ -27,7 +27,7 @@ def extract_spectrogram(fname, iname):
     fig.savefig(iname, dpi=100, pad_inches=0)
 
 
-def printToConsole(payload: str, time):
+def printToConsole(payload: str, time, sensorId):
 
     f = f'{str(datetime.now())}_sensor1.wav'
     wav_file = open(f'input/{f}', "wb")
@@ -44,7 +44,7 @@ def printToConsole(payload: str, time):
     chainsaw_detect = chainsaw_detect[0][0]
     if (chainsaw_detect == 1):
         # INCIDENT DETECTED
-        sensor = Sensors.objects.all().first()
+        sensor = Sensors.objects.get(id=sensorId)
         Incidents.objects.create(
             sensor=sensor,
             status=1,

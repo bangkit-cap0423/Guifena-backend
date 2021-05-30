@@ -34,7 +34,7 @@ def printToConsole(payload: str, time, sensorId):
         f'/home/a2292233/guifena/Guifena-backend/guifena/api/input/{f}', "wb")
     decode_string = base64.b64decode(payload)
     wav_file.write(decode_string)
-    fimg = f.replace('.wav', '.png')
+    fimg = f.replace('.m4a', '.png')
     extract_spectrogram(
         f'/home/a2292233/guifena/Guifena-backend/guifena/api/input/{f}', f"/home/a2292233/guifena/Guifena-backend/guifena/api/predict_img/{fimg}")
     input = []

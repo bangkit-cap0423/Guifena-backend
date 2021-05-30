@@ -61,8 +61,7 @@ def sendNotification():
         tokens.append(query)
     push_service = FCMNotification(api_key=api_key)
     data_message = {
-        "raisa": data,
-        "click_action": "FLUTTER_NOTIFICATION_CLICK"
+        "raisa": 'ok',
 
     }
     push_service.notify_multiple_devices(

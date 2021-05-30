@@ -48,7 +48,7 @@ class ListRecentIncidents(generics.ListAPIView):
         now = datetime.datetime.now()
         created_time = now - datetime.timedelta(minutes=60)
         incidents = Incidents.objects.filter(
-            timestamp__range=(created_time, now))
+            timestamp__range=(created_time, now)).order_by('-id')
         return incidents
 
 
@@ -83,11 +83,10 @@ class ReceiveAudio(APIView):
     def post(self, request):
         data = request.data
         sensor_id = data['sensor_id']
-        audio = data['audio']
-        # send audio to background task
-        # TODO: CHANGE THIS WITH THE REAL ML
-        time = timezone.now()
-        async_task('api.tasks.printToConsole', audio, time)
+        if 'audio' in data:
+            audio = data['audio']
+            time = timezone.now()
+            async_task('api.tasks.printToConsole', audio, time)
         sensor = Sensors.objects.get(id=sensor_id)
         sensor.last_seen = timezone.now()
         sensor.save()
@@ -117,3 +116,24 @@ class ReceiveToken(APIView):
             return Response({'status': 'OK'})
         Token.objects.create(token=token)
         return Response({'status': 'OK'})
+
+
+class AddSensor(APIView):
+    def post(self, request):
+        data = request.data
+        nama = data['nama']
+        location = data['location']
+        # check if given name is already on db
+        sensor = Sensors.objects.filter(nama=nama).first()
+        if sensor:
+            # name is already on db
+            sensor.location = location
+            sensor.save()
+            payload = {"status": "OK", "sensor_id": sensor.id}
+            return Response(payload)
+        else:
+            sensor = Sensors(nama=nama, location=location,
+                             status=0, last_seen=timezone.now())
+            sensor.save()
+            payload = {"status": "OK", "sensor_id": sensor.id}
+            return Response(payload)

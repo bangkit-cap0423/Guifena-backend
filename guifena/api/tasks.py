@@ -29,7 +29,7 @@ def extract_spectrogram(fname, iname):
 
 def printToConsole(payload: str, time, sensorId):
 
-    f = f'{str(datetime.now())}_sensor1.wav'
+    f = f'{str(datetime.now())}_sensor1.m4a'
     wav_file = open(f'input/{f}', "wb")
     decode_string = base64.b64decode(payload)
     wav_file.write(decode_string)

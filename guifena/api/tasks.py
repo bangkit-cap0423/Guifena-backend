@@ -9,7 +9,7 @@ from tensorflow import keras
 import base64
 from datetime import datetime
 from pyfcm import FCMNotification
-from .models import Incidents, Sensors
+from .models import Incidents, Sensors, Token
 # THIS IS WHERE ML CLASSIFICATION WILL HAPPEN
 
 

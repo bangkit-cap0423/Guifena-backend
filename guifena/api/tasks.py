@@ -31,7 +31,7 @@ def printToConsole(payload: str, time, sensorId):
 
     f = f'{str(datetime.now())}_sensor1.m4a'
     wav_file = open(
-        f'/home/a2292233/guifena/Guifena-backend/guifena/api/input/{f}', "w+")
+        f'/home/a2292233/guifena/Guifena-backend/guifena/api/input/{f}', "wb")
     decode_string = base64.b64decode(payload)
     wav_file.write(decode_string)
     fimg = f.replace('.wav', '.png')

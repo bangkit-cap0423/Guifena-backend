@@ -30,16 +30,19 @@ def extract_spectrogram(fname, iname):
 def printToConsole(payload: str, time, sensorId):
 
     f = f'{str(datetime.now())}_sensor1.m4a'
-    wav_file = open(f'input/{f}', "w+")
+    wav_file = open(
+        f'/home/a2292233/guifena/Guifena-backend/guifena/api/input/{f}', "w+")
     decode_string = base64.b64decode(payload)
     wav_file.write(decode_string)
     fimg = f.replace('.wav', '.png')
-    extract_spectrogram(f'input/{f}', f"predict_img/{fimg}")
+    extract_spectrogram(
+        f'/home/a2292233/guifena/Guifena-backend/guifena/api/input/{f}', f"/home/a2292233/guifena/Guifena-backend/guifena/api/predict_img/{fimg}")
     input = []
     input.append(tf.keras.preprocessing.image.img_to_array(
-        tf.keras.preprocessing.image.load_img(f"predict_img/{fimg}", target_size=(100, 100))))
+        tf.keras.preprocessing.image.load_img(f"/home/a2292233/guifena/Guifena-backend/guifena/api/predict_img/{fimg}", target_size=(100, 100))))
     input = np.array(input)
-    model1 = keras.models.load_model('model/')
+    model1 = keras.models.load_model(
+        '/home/a2292233/guifena/Guifena-backend/guifena/api/model/')
     chainsaw_detect = model1.predict_classes(input)
     chainsaw_detect = chainsaw_detect[0][0]
     if (chainsaw_detect == 1):

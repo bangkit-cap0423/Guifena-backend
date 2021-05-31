@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from pyfcm import FCMNotification
 from .models import Incidents, Sensors, Token
 import api.constanta as const
+from django.utils import timezone
 # THIS IS WHERE ML CLASSIFICATION WILL HAPPEN
 
 
@@ -74,7 +75,7 @@ def sendNotification():
 
 def CheckSensorPeriodic():
     sensors = Sensors.objects.all()
-    now = datetime.now()
+    now = timezone.now()
     created_time = now - timedelta(minutes=10)
     for sensor in sensors:
         timestamp = sensor.last_seen

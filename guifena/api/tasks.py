@@ -30,7 +30,8 @@ def extract_spectrogram(fname, iname):
 
 
 def printToConsole(payload: str, time, sensorId):
-
+    if check_recent_incident(sensorId):
+        return 'already done'
     f = f'{str(datetime.now())}_sensor1.m4a'
     wav_file = open(
         f'/home/a2292233/guifena/Guifena-backend/guifena/api/input/{f}', "wb")
@@ -56,6 +57,7 @@ def printToConsole(payload: str, time, sensorId):
             timestamp=time
         )
         sendNotification()
+        return 'detected'
 
 
 def sendNotification():
@@ -93,3 +95,12 @@ def time_in_range(start, end, x):
         return start <= x <= end
     else:
         return start <= x or x <= end
+
+
+def check_recent_incident(id):
+    sensor = Sensors.objects.get(id=id)
+    now = timezone.now()
+    created_time = now - timedelta(minutes=60)
+    incidents_count = Incidents.objects.filter(
+        timestamp__range=(created_time, now)).filter(sensor=sensor).count()
+    return incidents_count > 0

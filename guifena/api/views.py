@@ -112,7 +112,7 @@ class ReceiveToken(APIView):
         data = request.data
         token = data['token']
         check_token = Token.objects.filter(token=token).count()
-        if check_token > 1:
+        if check_token > 0:
             return Response({'status': 'OK'})
         Token.objects.create(token=token)
         return Response({'status': 'OK'})

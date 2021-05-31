@@ -7,9 +7,10 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 import base64
-from datetime import datetime
+from datetime import datetime, timedelta
 from pyfcm import FCMNotification
 from .models import Incidents, Sensors, Token
+import api.constanta as const
 # THIS IS WHERE ML CLASSIFICATION WILL HAPPEN
 
 
@@ -69,3 +70,25 @@ def sendNotification():
     }
     push_service.notify_multiple_devices(
         registration_ids=tokens, data_message=data_message)
+
+
+def CheckSensorPeriodic():
+    sensors = Sensors.objects.all()
+    now = datetime.now()
+    created_time = now - timedelta(minutes=10)
+    for sensor in sensors:
+        timestamp = sensor.last_seen
+        if time_in_range(now, created_time, timestamp):
+            sensor.status = const.STATUS_ONLINE
+            sensor.save()
+        else:
+            sensor.status = const.STATUS_OFFLINE
+            sensor.save()
+
+
+def time_in_range(start, end, x):
+    """Return true if x is in the range [start, end]"""
+    if start <= end:
+        return start <= x <= end
+    else:
+        return start <= x or x <= end

@@ -79,7 +79,7 @@ def CheckSensorPeriodic():
     created_time = now - timedelta(minutes=10)
     for sensor in sensors:
         timestamp = sensor.last_seen
-        if time_in_range(now, created_time, timestamp):
+        if time_in_range(created_time, now, timestamp):
             sensor.status = const.STATUS_ONLINE
             sensor.save()
         else:

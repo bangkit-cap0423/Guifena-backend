@@ -102,5 +102,6 @@ def check_recent_incident(id):
     now = timezone.now()
     created_time = now - timedelta(minutes=60)
     incidents_count = Incidents.objects.filter(
-        timestamp__range=(created_time, now)).filter(sensor=sensor).count()
+        timestamp__range=(created_time, now)).filter(sensor=sensor).filter(
+            status__lt=const.INCIDENTS_RESOLVED).count()
     return incidents_count > 0

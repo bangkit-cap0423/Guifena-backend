@@ -1,4 +1,5 @@
 from django.views import generic
+from pyfcm.fcm import FCMNotification
 from .serializers import IncidentSerializer, SensorSerializers
 from rest_framework.response import Response
 from django.shortcuts import render
@@ -137,3 +138,30 @@ class AddSensor(APIView):
             sensor.save()
             payload = {"status": "OK", "sensor_id": sensor.id}
             return Response(payload)
+
+
+def sendNotification():
+    api_key = 'AAAAej261Qg:APA91bFNLBEeIl_ZPTi98ct_fudgnUDsVEE8Xd7mB9azDSGk5Hu8xJWc8AO6AvNohdySg9hJe7uSdyTwUsoehGKzYbr8JOMZmoVv0Vm3SWmiqlEhy0iFOqB1wMGEgzAMRseJNokpFIPF'
+    tokens = []
+    query_token = Token.objects.all()
+    for query in query_token:
+        tokens.append(query.token)
+    push_service = FCMNotification(api_key=api_key)
+    data_message = {
+        "raisa": 'ok',
+
+    }
+    push_service.notify_multiple_devices(
+        registration_ids=tokens, data_message=data_message)
+
+        
+class sendNotificationDummy(APIView):
+    def get(self, request):
+        time = timezone.now()
+        sensor = Sensors.objects.get(id=1)
+        Incidents.objects.create(
+            sensor=sensor,
+            status=1,
+            timestamp=time
+        )
+        sendNotification()

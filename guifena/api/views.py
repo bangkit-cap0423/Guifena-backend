@@ -165,3 +165,4 @@ class sendNotificationDummy(APIView):
             timestamp=time
         )
         sendNotification()
+        return Response({'status': 'OK'})
